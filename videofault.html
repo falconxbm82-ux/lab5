@@ -46,6 +46,19 @@
             overflow-x: hidden;
         }
 
+        [id] {
+            scroll-margin-top: 6rem;
+        }
+
+        .text-slate-500 {
+            color: #a8b4c4;
+        }
+
+        :focus-visible {
+            outline: 3px solid #67e8f9;
+            outline-offset: 3px;
+        }
+
         .gradient-text {
             background: linear-gradient(135deg, #06b6d4 0%, #6366f1 50%, #a855f7 100%);
             -webkit-background-clip: text;
@@ -107,7 +120,25 @@
 
         /* Toast Alert Notification */
         #toast {
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
+        }
+
+        #toast.toast-visible {
+            animation: toast-enter 0.38s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+        }
+
+        @keyframes toast-enter {
+            from { transform: translateY(1.5rem) scale(0.96); }
+            to { transform: translateY(0) scale(1); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
 
         /* Scrollbar Styling */
@@ -126,7 +157,7 @@
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col justify-between selection:bg-accentViolet selection:text-white">
+<body id="top" class="antialiased min-h-screen flex flex-col justify-between selection:bg-accentViolet selection:text-white">
 
     <!-- Background Ambient Glow Orbs -->
     <div class="orb w-96 h-96 bg-indigo-600 top-10 left-1/4 animate-pulse"></div>
@@ -134,7 +165,7 @@
     <div class="orb w-80 h-80 bg-purple-600 bottom-1/3 left-10"></div>
 
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 bg-slate-800 text-white border border-cyan-500/30 px-5 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md">
+    <div id="toast" role="status" aria-live="polite" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 bg-slate-800 text-white border border-cyan-400/60 px-5 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md">
         <div class="w-10 h-10 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
             <i class="fa-solid fa-cloud-arrow-down text-lg"></i>
         </div>
@@ -148,7 +179,7 @@
     <header class="fixed top-0 left-0 right-0 z-40 glass-header border-b border-slate-800 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- Logo -->
-            <a href="#" class="flex items-center gap-3 group">
+            <a href="#top" class="flex items-center gap-3 group">
                 <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center shadow-glow group-hover:scale-105 transition-transform duration-300">
                     <i class="fa-solid fa-play text-slate-900 font-black text-lg ml-0.5"></i>
                 </div>
@@ -161,6 +192,7 @@
                 <a href="#categories" class="hover:text-cyan-400 transition-colors">Каталог</a>
                 <a href="#starter-pack" class="hover:text-cyan-400 transition-colors">Пак месяца</a>
                 <a href="#license" class="hover:text-cyan-400 transition-colors">Лицензия</a>
+                <a href="#faq" class="hover:text-cyan-400 transition-colors">FAQ</a>
             </nav>
 
             <!-- Action Button -->
@@ -184,6 +216,7 @@
             <a href="#categories" class="mobile-link block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-cyan-400 text-base font-medium">Каталог</a>
             <a href="#starter-pack" class="mobile-link block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-cyan-400 text-base font-medium">Пак месяца</a>
             <a href="#license" class="mobile-link block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-cyan-400 text-base font-medium">Лицензия</a>
+            <a href="#faq" class="mobile-link block px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-cyan-400 text-base font-medium">FAQ</a>
             <a href="#starter-pack" class="mobile-link block w-full text-center mt-4 px-5 py-3 rounded-xl font-semibold text-white gradient-bg shadow-glow">
                 Скачать Пак Месяца
             </a>
@@ -212,10 +245,10 @@
 
                 <!-- CTA Buttons -->
                 <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto sm:max-w-none">
-                    <a href="#starter-pack" onclick="downloadMainBundle()" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-white gradient-bg shadow-glow hover:shadow-glowCyan hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 group text-base">
+                    <button type="button" onclick="downloadMainBundle(this)" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-white gradient-bg shadow-glow hover:shadow-glowCyan hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 group text-base">
                         <i class="fa-solid fa-download group-hover:translate-y-0.5 transition-transform"></i>
                         Скачать бесплатный пак
-                    </a>
+                    </button>
                     <a href="#categories" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-slate-200 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 hover:border-cyan-500/50 hover:text-cyan-300 transition-all duration-300 flex items-center justify-center gap-2 text-base backdrop-blur-md">
                         <i class="fa-solid fa-border-all text-slate-400"></i>
                         Перейти к каталогу
@@ -419,15 +452,34 @@
                     <p class="text-slate-400 text-sm max-w-md">Самые популярные бесшовные комплекты этого месяца. Загружайте бесплатно без ограничений.</p>
                 </div>
 
+                <div class="mb-8 grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_220px] gap-3 max-w-3xl">
+                    <label class="relative block">
+                        <span class="sr-only">Поиск ресурсов</span>
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true"></i>
+                        <input id="product-search" type="search" placeholder="Название, формат или описание" class="w-full rounded-lg border border-slate-600 bg-slate-900 px-11 py-3 text-sm text-white placeholder:text-slate-400 focus:border-cyan-300">
+                    </label>
+                    <label>
+                        <span class="sr-only">Фильтр по категории</span>
+                        <select id="product-category" class="w-full rounded-lg border border-slate-600 bg-slate-900 px-4 py-3 text-sm text-white focus:border-cyan-300">
+                            <option value="">Все категории</option>
+                            <option value="Шаблоны">Шаблоны</option>
+                            <option value="Футажи">Футажи</option>
+                            <option value="Музыка">Музыка и SFX</option>
+                            <option value="LUTs">LUTs и пресеты</option>
+                        </select>
+                    </label>
+                </div>
+
                 <!-- Product Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     
                     <!-- Item 1 -->
-                    <div class="bg-cardBg rounded-2xl border border-slate-800 overflow-hidden hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between group shadow-lg">
+                    <div data-category="Шаблоны" class="product-card bg-cardBg rounded-2xl border border-slate-800 overflow-hidden hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between group shadow-lg">
                         <div>
                             <!-- Visual Banner Preview -->
-                            <div class="h-44 bg-gradient-to-br from-indigo-900/80 via-slate-900 to-purple-900/80 relative flex items-center justify-center p-4 overflow-hidden">
-                                <div class="absolute inset-0 bg-slate-950/20"></div>
+                            <div class="h-44 relative flex items-center justify-center p-4 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?auto=format&fit=crop&w=900&h=500&q=80&fm=webp" alt="Неоновые световые инсталляции для титров" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+                                <div class="absolute inset-0 bg-slate-950/55"></div>
                                 <div class="text-center relative z-10">
                                     <div class="w-12 h-12 mx-auto rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 flex items-center justify-center text-xl mb-2 group-hover:scale-110 transition-transform">
                                         <i class="fa-solid fa-font"></i>
@@ -462,7 +514,7 @@
 
                         <!-- Card Action -->
                         <div class="p-5 pt-0">
-                            <button onclick="downloadFile('Neon Titles Pack AE')" class="w-full py-3 rounded-xl gradient-bg font-bold text-white text-xs sm:text-sm hover:shadow-glow transition-all duration-300 flex items-center justify-center gap-2 active:scale-95">
+                            <button onclick="downloadFile('Neon Titles Pack AE', this)" class="w-full py-3 rounded-xl gradient-bg font-bold text-white text-xs sm:text-sm hover:shadow-glow transition-all duration-300 flex items-center justify-center gap-2 active:scale-95">
                                 <i class="fa-solid fa-file-arrow-down"></i>
                                 Скачать ZIP
                             </button>
@@ -470,11 +522,12 @@
                     </div>
 
                     <!-- Item 2 -->
-                    <div class="bg-cardBg rounded-2xl border border-slate-800 overflow-hidden hover:border-cyan-500/50 transition-all duration-300 flex flex-col justify-between group shadow-lg">
+                    <div data-category="LUTs" class="product-card bg-cardBg rounded-2xl border border-slate-800 overflow-hidden hover:border-cyan-500/50 transition-all duration-300 flex flex-col justify-between group shadow-lg">
                         <div>
                             <!-- Visual Banner Preview -->
-                            <div class="h-44 bg-gradient-to-br from-cyan-900/80 via-slate-900 to-teal-900/80 relative flex items-center justify-center p-4 overflow-hidden">
-                                <div class="absolute inset-0 bg-slate-950/20"></div>
+                            <div class="h-44 relative flex items-center justify-center p-4 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&h=500&q=80&fm=webp" alt="Кинематографичный пейзаж для цветокоррекции" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+                                <div class="absolute inset-0 bg-slate-950/55"></div>
                                 <div class="text-center relative z-10">
                                     <div class="w-12 h-12 mx-auto rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center text-xl mb-2 group-hover:scale-110 transition-transform">
                                         <i class="fa-solid fa-palette"></i>
@@ -509,7 +562,7 @@
 
                         <!-- Card Action -->
                         <div class="p-5 pt-0">
-                            <button onclick="downloadFile('Cinematic LUTs Bundle')" class="w-full py-3 rounded-xl gradient-bg font-bold text-white text-xs sm:text-sm hover:shadow-glow transition-all duration-300 flex items-center justify-center gap-2 active:scale-95">
+                            <button onclick="downloadFile('Cinematic LUTs Bundle', this)" class="w-full py-3 rounded-xl gradient-bg font-bold text-white text-xs sm:text-sm hover:shadow-glow transition-all duration-300 flex items-center justify-center gap-2 active:scale-95">
                                 <i class="fa-solid fa-file-arrow-down"></i>
                                 Скачать ZIP
                             </button>
@@ -517,11 +570,12 @@
                     </div>
 
                     <!-- Item 3 -->
-                    <div class="bg-cardBg rounded-2xl border border-slate-800 overflow-hidden hover:border-purple-500/50 transition-all duration-300 flex flex-col justify-between group shadow-lg">
+                    <div data-category="Музыка" class="product-card bg-cardBg rounded-2xl border border-slate-800 overflow-hidden hover:border-purple-500/50 transition-all duration-300 flex flex-col justify-between group shadow-lg">
                         <div>
                             <!-- Visual Banner Preview -->
-                            <div class="h-44 bg-gradient-to-br from-purple-900/80 via-slate-900 to-pink-900/80 relative flex items-center justify-center p-4 overflow-hidden">
-                                <div class="absolute inset-0 bg-slate-950/20"></div>
+                            <div class="h-44 relative flex items-center justify-center p-4 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=900&h=500&q=80&fm=webp" alt="Световое шоу и звуковая сцена" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+                                <div class="absolute inset-0 bg-slate-950/55"></div>
                                 <div class="text-center relative z-10">
                                     <div class="w-12 h-12 mx-auto rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/40 flex items-center justify-center text-xl mb-2 group-hover:scale-110 transition-transform">
                                         <i class="fa-solid fa-volume-high"></i>
@@ -556,7 +610,7 @@
 
                         <!-- Card Action -->
                         <div class="p-5 pt-0">
-                            <button onclick="downloadFile('SFX Transition Pack 4K')" class="w-full py-3 rounded-xl gradient-bg font-bold text-white text-xs sm:text-sm hover:shadow-glow transition-all duration-300 flex items-center justify-center gap-2 active:scale-95">
+                            <button onclick="downloadFile('SFX Transition Pack 4K', this)" class="w-full py-3 rounded-xl gradient-bg font-bold text-white text-xs sm:text-sm hover:shadow-glow transition-all duration-300 flex items-center justify-center gap-2 active:scale-95">
                                 <i class="fa-solid fa-file-arrow-down"></i>
                                 Скачать ZIP
                             </button>
@@ -564,14 +618,15 @@
                     </div>
 
                     <!-- Item 4 -->
-                    <div class="bg-cardBg rounded-2xl border border-slate-800 overflow-hidden hover:border-emerald-500/50 transition-all duration-300 flex flex-col justify-between group shadow-lg">
+                    <div data-category="Шаблоны" class="product-card bg-cardBg rounded-2xl border border-slate-800 overflow-hidden hover:border-emerald-500/50 transition-all duration-300 flex flex-col justify-between group shadow-lg">
                         <div>
                             <!-- Visual Banner Preview -->
-                            <div class="h-44 bg-gradient-to-br from-emerald-900/80 via-slate-900 to-blue-900/80 relative flex items-center justify-center p-4 overflow-hidden">
-                                <div class="absolute inset-0 bg-slate-950/20"></div>
+                            <div class="h-44 relative flex items-center justify-center p-4 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=900&h=500&q=80&fm=webp" alt="Ночной город с неоновыми огнями" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+                                <div class="absolute inset-0 bg-slate-950/55"></div>
                                 <div class="text-center relative z-10">
                                     <div class="w-12 h-12 mx-auto rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-xl mb-2 group-hover:scale-110 transition-transform">
-                                        <i class="fa-solid fa-[#00ffcc] fa-bolt"></i>
+                                        <i class="fa-solid fa-bolt"></i>
                                     </div>
                                     <span class="text-xs font-mono text-emerald-300 bg-slate-900/80 px-2 py-0.5 rounded border border-emerald-500/30">.SETTING / .MOGRT</span>
                                 </div>
@@ -603,13 +658,41 @@
 
                         <!-- Card Action -->
                         <div class="p-5 pt-0">
-                            <button onclick="downloadFile('Cyberpunk Glitch Pack')" class="w-full py-3 rounded-xl gradient-bg font-bold text-white text-xs sm:text-sm hover:shadow-glow transition-all duration-300 flex items-center justify-center gap-2 active:scale-95">
+                            <button onclick="downloadFile('Cyberpunk Glitch Pack', this)" class="w-full py-3 rounded-xl gradient-bg font-bold text-white text-xs sm:text-sm hover:shadow-glow transition-all duration-300 flex items-center justify-center gap-2 active:scale-95">
                                 <i class="fa-solid fa-file-arrow-down"></i>
                                 Скачать ZIP
                             </button>
                         </div>
                     </div>
 
+                </div>
+                <p id="no-products" class="hidden mt-8 text-center text-slate-300" role="status">Ничего не найдено. Измените запрос или категорию.</p>
+            </div>
+        </section>
+
+        <section id="faq" class="py-16 md:py-24">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-10">
+                    <h2 class="font-heading text-2xl sm:text-4xl font-extrabold text-white">Частые вопросы</h2>
+                    <p class="mt-3 text-slate-300">Коротко о загрузках, лицензии и форматах.</p>
+                </div>
+                <div class="divide-y divide-slate-700 border-y border-slate-700">
+                    <details id="faq-license" class="group py-5">
+                        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-white">Как можно использовать ресурсы?<i class="fa-solid fa-plus text-cyan-300 transition-transform group-open:rotate-45" aria-hidden="true"></i></summary>
+                        <p class="mt-3 pr-8 text-sm leading-relaxed text-slate-300">На этой странице заявлено коммерческое использование. Перед публикацией проверьте лицензию конкретного архива: условия могут зависеть от правообладателя.</p>
+                    </details>
+                    <details class="group py-5">
+                        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-white">С какими редакторами совместимы файлы?<i class="fa-solid fa-plus text-cyan-300 transition-transform group-open:rotate-45" aria-hidden="true"></i></summary>
+                        <p class="mt-3 pr-8 text-sm leading-relaxed text-slate-300">В карточках указаны форматы и поддерживаемые редакторы. LUT-файлы .cube совместимы со многими современными приложениями для монтажа и цветокоррекции.</p>
+                    </details>
+                    <details id="faq-support" class="group py-5">
+                        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-white">Где посмотреть новые наборы?<i class="fa-solid fa-plus text-cyan-300 transition-transform group-open:rotate-45" aria-hidden="true"></i></summary>
+                        <p class="mt-3 pr-8 text-sm leading-relaxed text-slate-300">Новые позиции появятся в <a href="#starter-pack" class="text-cyan-300 underline underline-offset-4 hover:text-cyan-200">паке месяца</a>. Сейчас скачивание работает как демонстрация интерфейса; реальные архивы не подключены.</p>
+                    </details>
+                    <details class="group py-5">
+                        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-white">Нужно ли создавать аккаунт?<i class="fa-solid fa-plus text-cyan-300 transition-transform group-open:rotate-45" aria-hidden="true"></i></summary>
+                        <p class="mt-3 pr-8 text-sm leading-relaxed text-slate-300">Страница не запрашивает аккаунт или платёжные данные. Кнопки загрузки пока показывают только демонстрационное состояние.</p>
+                    </details>
                 </div>
             </div>
         </section>
@@ -631,7 +714,7 @@
                         </p>
                         
                         <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <button onclick="downloadMainBundle()" class="w-full sm:w-auto px-10 py-4 rounded-xl font-bold text-slate-950 bg-cyan-400 hover:bg-cyan-300 hover:shadow-glowCyan transition-all duration-300 flex items-center justify-center gap-3 text-base active:scale-95">
+                            <button onclick="downloadMainBundle(this)" class="w-full sm:w-auto px-10 py-4 rounded-xl font-bold text-slate-950 bg-cyan-400 hover:bg-cyan-300 hover:shadow-glowCyan transition-all duration-300 flex items-center justify-center gap-3 text-base active:scale-95">
                                 <i class="fa-solid fa-box-archive text-lg"></i>
                                 Скачать полный набор (ZIP)
                             </button>
@@ -652,7 +735,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
                 <!-- Col 1: Brand -->
                 <div class="md:col-span-2">
-                    <a href="#" class="flex items-center gap-3 mb-4">
+                    <a href="#top" class="flex items-center gap-3 mb-4">
                         <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
                             <i class="fa-solid fa-play text-slate-900 font-black text-sm ml-0.5"></i>
                         </div>
@@ -662,13 +745,13 @@
                         Открытая библиотека премиальных цифровых ресурсов для видеомейкеров, блогеров и агентств. Создавайте профессиональный контент быстрее.
                     </p>
                     <div class="flex space-x-4 text-slate-400">
-                        <a href="#" class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500 hover:text-cyan-400 flex items-center justify-center transition-colors">
+                        <a href="https://www.youtube.com/results?search_query=VideoVault" aria-label="Найти VideoVault на YouTube" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500 hover:text-cyan-400 flex items-center justify-center transition-colors">
                             <i class="fa-brands fa-youtube"></i>
                         </a>
-                        <a href="#" class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500 hover:text-cyan-400 flex items-center justify-center transition-colors">
+                        <a href="https://t.me/s/VideoVault" aria-label="Открыть поиск VideoVault в Telegram" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500 hover:text-cyan-400 flex items-center justify-center transition-colors">
                             <i class="fa-brands fa-telegram"></i>
                         </a>
-                        <a href="#" class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500 hover:text-cyan-400 flex items-center justify-center transition-colors">
+                        <a href="https://vk.com/search?c%5Bq%5D=VideoVault&c%5Bsection%5D=groups" aria-label="Найти VideoVault во ВКонтакте" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500 hover:text-cyan-400 flex items-center justify-center transition-colors">
                             <i class="fa-brands fa-vk"></i>
                         </a>
                     </div>
@@ -681,6 +764,7 @@
                         <li><a href="#features" class="hover:text-cyan-400 transition-colors">Преимущества</a></li>
                         <li><a href="#categories" class="hover:text-cyan-400 transition-colors">Каталог</a></li>
                         <li><a href="#starter-pack" class="hover:text-cyan-400 transition-colors">Пак месяца</a></li>
+                        <li><a href="#faq" class="hover:text-cyan-400 transition-colors">Частые вопросы</a></li>
                         <li><a href="#license" class="hover:text-cyan-400 transition-colors">Коммерческая лицензия</a></li>
                     </ul>
                 </div>
@@ -689,17 +773,17 @@
                 <div>
                     <h4 class="font-heading font-bold text-white text-sm mb-4">Правовая инфо</h4>
                     <ul class="space-y-2.5 text-xs sm:text-sm">
-                        <li><a href="#" class="hover:text-cyan-400 transition-colors">Условия использования</a></li>
-                        <li><a href="#" class="hover:text-cyan-400 transition-colors">Royalty-Free Соглашение</a></li>
-                        <li><a href="#" class="hover:text-cyan-400 transition-colors">Запрос авторских прав</a></li>
-                        <li><a href="#" class="hover:text-cyan-400 transition-colors">Поддержка</a></li>
+                        <li><a href="#faq-license" class="hover:text-cyan-400 transition-colors">Условия использования</a></li>
+                        <li><a href="#faq-license" class="hover:text-cyan-400 transition-colors">Royalty-Free Соглашение</a></li>
+                        <li><a href="#faq-license" class="hover:text-cyan-400 transition-colors">Запрос авторских прав</a></li>
+                        <li><a href="#faq-support" class="hover:text-cyan-400 transition-colors">Поддержка</a></li>
                     </ul>
                 </div>
             </div>
 
             <!-- Bottom Line -->
             <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-                <p>© 2026 VideoVault. Все права защищены. Контент доступен по бесплатной коммерческой лицензии.</p>
+                <p>© <span id="current-year"></span> VideoVault. Все права защищены. Контент доступен по бесплатной коммерческой лицензии.</p>
                 <p>Designed for Creators with ❤️</p>
             </div>
         </div>
@@ -735,6 +819,31 @@
             });
         });
 
+        const productSearch = document.getElementById('product-search');
+        const productCategory = document.getElementById('product-category');
+        const productCards = document.querySelectorAll('.product-card');
+        const noProducts = document.getElementById('no-products');
+
+        function applyProductFilters() {
+            const query = productSearch.value.trim().toLocaleLowerCase('ru');
+            const category = productCategory.value;
+            let visibleCount = 0;
+
+            productCards.forEach(card => {
+                const matchesCategory = !category || card.dataset.category === category;
+                const matchesQuery = card.textContent.toLocaleLowerCase('ru').includes(query);
+                const isVisible = matchesCategory && matchesQuery;
+                card.classList.toggle('hidden', !isVisible);
+                visibleCount += Number(isVisible);
+            });
+
+            noProducts.classList.toggle('hidden', visibleCount > 0);
+        }
+
+        productSearch.addEventListener('input', applyProductFilters);
+        productCategory.addEventListener('change', applyProductFilters);
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
         // Toast Notification Function
         let toastTimeout;
         function showToast(title, message) {
@@ -745,24 +854,46 @@
             // Show Toast
             toast.classList.remove('translate-y-24', 'opacity-0');
             toast.classList.add('translate-y-0', 'opacity-100');
+            toast.classList.add('toast-visible');
 
             clearTimeout(toastTimeout);
             toastTimeout = setTimeout(() => {
                 toast.classList.remove('translate-y-0', 'opacity-100');
                 toast.classList.add('translate-y-24', 'opacity-0');
+                toast.classList.remove('toast-visible');
             }, 4000);
         }
 
-        // Mock Download Functions
-        function downloadFile(itemName) {
-            showToast('Загрузка начата', `Файл "${itemName}.zip" успешно формируется...`);
+        function showDownloadState(button, itemName) {
+            if (!button || button.disabled) return;
+
+            const originalContent = button.innerHTML;
+            button.disabled = true;
+            button.setAttribute('aria-busy', 'true');
+            button.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Подготовка...';
+            showToast('Подготовка набора', `Демо-интерфейс: реальная загрузка архива «${itemName}» не подключена.`);
+
+            setTimeout(() => {
+                button.innerHTML = '<i class="fa-solid fa-circle-check" aria-hidden="true"></i> Демо готово';
+                button.removeAttribute('aria-busy');
+                setTimeout(() => {
+                    button.innerHTML = originalContent;
+                    button.disabled = false;
+                }, 1200);
+            }, 900);
         }
 
-        function downloadMainBundle() {
-            showToast('Загрузка Пака Месяца', 'Формирование архива VideoVault_Mega_Bundle_2026.zip (1.1 GB)...');
+        function downloadFile(itemName, button) {
+            showDownloadState(button, `${itemName}.zip`);
+        }
+
+        function downloadMainBundle(button) {
+            showDownloadState(button, 'VideoVault Mega Bundle (1.1 GB)');
         }
 
         function filterCategory(categoryName) {
+            productCategory.value = categoryName;
+            applyProductFilters();
             showToast('Фильтр категорий', `Открыта категория: "${categoryName}". Все элементы бесплатны.`);
             // Scroll smoothly to starter pack to show samples
             const element = document.getElementById('starter-pack');
